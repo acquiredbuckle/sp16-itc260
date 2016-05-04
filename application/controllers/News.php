@@ -9,6 +9,9 @@ class News extends CI_Controller {
                 $this->load->model('news_model');
                 $this->load->helper('url_helper');
                 $this->load->helper('url');
+             
+                //global banner for all methods
+                $this->config->set_item('banner','Global News Banner');
         }
 
         public function index()
@@ -17,9 +20,7 @@ class News extends CI_Controller {
                 $data['page_id'] = "News";
                 $data['title'] = 'News archive';
 
-         //       $this->load->view('templates/header', $data);
                 $this->load->view('news/index', $data);
-          //      $this->load->view('templates/footer');
         }
 
         public function view($slug = NULL)
@@ -34,10 +35,7 @@ class News extends CI_Controller {
 
                 $data['title'] = $data['news_item']['title'];
 
-               // $this->load->view('templates/header', $data);
                 $this->load->view('news/view', $data);
-               // $this->load->view('templates/footer');
-            
         }
     
         public function create()
@@ -53,30 +51,21 @@ class News extends CI_Controller {
 
             if ($this->form_validation->run() === FALSE)
             {
-              //  $this->load->view('templates/header', $data);
                 $this->load->view('news/create', $data);
-             //   $this->load->view('templates/footer');
-
             }
             else
             {
-                $slug = $this->news_model->set_news();
-                
-                
-                $data['news_item'] = $this->news_model->get_news($slug);
-                $data['page_id'] = "News";
+                 $slug = $this->news_model->set_news();
             
-                if (empty($data['news_item']))
-                {
-                        show_404();
+                if ($slug)
+                {//data present
+                       feedback('News item successfully created!','notice');
+                       redirect('news/view/' . $slug);
+                }else{//we have an issue
+                       feedback('News item NOT created!','warning');
+                       redirect('news/create');
                 }
 
-                $data['title'] = $data['news_item']['title'];
-
-            //    $this->load->view('templates/header', $data);
-                $this->load->view('news/view', $data);
-           //     $this->load->view('templates/footer');
-                
                 
             }
         }

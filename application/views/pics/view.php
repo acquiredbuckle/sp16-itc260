@@ -14,6 +14,7 @@ foreach($pics as $pic){
     $photo_url = '
     http://farm'. $pic->farm . '.staticflickr.com/' . $pic->server . '/' . $pic->id . '_' . $pic->secret . '_' . $size . '.jpg';
     echo "<img class='img-responsive center-block' title='" . $pic->title . "' src='" . $photo_url . "' />";
+    echo $pic->title;
     echo '</div>';
 }
 
